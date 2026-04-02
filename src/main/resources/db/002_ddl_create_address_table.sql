@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS address (
+    id SERIAL PRIMARY KEY NOT NULL,
+    url VARCHAR(2000) NOT NULL UNIQUE,
+    code VARCHAR(2000),
+    total INT
+);

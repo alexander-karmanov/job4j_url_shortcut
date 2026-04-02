@@ -1,0 +1,29 @@
+### IntelliJ IDEA ###
+.idea/
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.settings/
+
+# Archives
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# Other
+target/
+testdb.mv.db
+testdb.trace.db
+
+
+
