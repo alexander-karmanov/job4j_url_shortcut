@@ -15,7 +15,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @EqualsAndHashCode.Include
     @NotBlank(message = "Title must be not empty")
     private String url;

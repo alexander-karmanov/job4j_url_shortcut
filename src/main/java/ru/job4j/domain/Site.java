@@ -19,7 +19,7 @@ public class Site {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @NotBlank(message = "Title must be not empty")
     @EqualsAndHashCode.Include
     private String site;
