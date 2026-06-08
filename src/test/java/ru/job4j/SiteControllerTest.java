@@ -72,24 +72,26 @@ public class SiteControllerTest {
     void whenRegisterNewSiteThenReturnCreated() throws Exception {
         Site newSite = new Site();
         newSite.setSite("new.com");
-
         when(userService.findBySite("new.com")).thenReturn(Optional.empty());
         when(encoder.encode(anyString())).thenReturn("encodedPassword");
 
         Site savedSite = new Site();
         savedSite.setId(1);
         savedSite.setSite("new.com");
-        savedSite.setLogin(RandomStringUtils.randomNumeric(8));
+        savedSite.setLogin("12345678");
         savedSite.setPassword("encodedPassword");
 
-        when(userService.save(any(Site.class))).thenReturn(Optional.of(savedSite));
+        when(userService.saveWithUniqueConstraintHandling(any(Site.class)))
+                .thenReturn(Optional.of(savedSite));
 
         mockMvc.perform(post("/registration")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"site\": \"new.com\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.registration").value(true))
-                .andExpect(jsonPath("$.password").exists());
+                .andExpect(jsonPath("$.password").exists())
+                .andExpect(jsonPath("$.password").isString())
+                .andExpect(jsonPath("$.login").value("12345678"));
     }
 
     @Test
@@ -101,7 +103,7 @@ public class SiteControllerTest {
         mockAddress.setCode(existingCode);
         mockAddress.setUrl("http://test.com");
 
-        when(addressService.findByCode(existingCode)).thenReturn(Optional.of(mockAddress));
+        when(addressService.findAndIncrementTotalByCode(existingCode)).thenReturn(Optional.of(mockAddress));
         when(addressService.update(any(Address.class))).thenReturn(true);
 
         mockMvc.perform(get("/redirect/{code}", existingCode))

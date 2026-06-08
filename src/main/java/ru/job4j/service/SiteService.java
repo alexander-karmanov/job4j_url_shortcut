@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.domain.Site;
 import ru.job4j.repository.UserRepository;
 import java.util.Optional;
@@ -40,6 +41,16 @@ public class SiteService implements UserDetailsService {
             LOG.error("Error!", e);
         }
         return rsl;
+    }
+
+    @Transactional
+    public Optional<Site> saveWithUniqueConstraintHandling(Site site) {
+        try {
+            return save(site);
+        } catch (DataIntegrityViolationException e) {
+            LOG.warn("Unique constraint violation for site: {}", site.getSite(), e);
+            return Optional.empty();
+        }
     }
 
     @Override
